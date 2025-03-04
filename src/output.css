@@ -11,6 +11,8 @@
     --color-gray-800: oklch(0.278 0.033 256.848);
     --color-white: #fff;
     --spacing: 0.25rem;
+    --radius-2xl: 1rem;
+    --radius-4xl: 2rem;
     --default-font-family: var(--font-sans);
     --default-font-feature-settings: var(--font-sans--font-feature-settings);
     --default-font-variation-settings: var(
@@ -286,6 +288,12 @@
   }
   .overflow-hidden {
     overflow: hidden;
+  }
+  .rounded-2xl {
+    border-radius: var(--radius-2xl);
+  }
+  .rounded-4xl {
+    border-radius: var(--radius-4xl);
   }
   .rounded-full {
     border-radius: calc(infinity * 1px);
