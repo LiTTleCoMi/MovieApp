@@ -6,14 +6,27 @@
 		<title>Movies</title>
         <link href="output.css" rel="stylesheet">
         <script src="index.js" defer></script>
+        <script src="search.js" defer></script>
 	</head>
 	<body class="bg-gray-800">
 		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2">
-			<div class="bg-blue-900 w-fit px-3 py-3 rounded-full flex justify-start overflow-hidden text-white">
+			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
 				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
 				<input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
 			</div>
-            <img class="svg" src="../svg/bookmark.svg" alt="view saved movies">
+            <div class="bg-blue-900 p-3 rounded-full">
+                <a href="./library.html">
+                    <img class="svg" src="../svg/bookmark.svg" alt="view saved movies">
+                </a>
+            </div>
 		</header>
+
+        <main class="flex flex-wrap py-6 gap-3 justify-evenly">
+            <div class="bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%] aspect-[2/3]">
+                <div>
+
+                </div>
+            </div>
+        </main>
 	</body>
 </html>
