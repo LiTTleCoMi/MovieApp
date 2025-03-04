@@ -4,8 +4,16 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Movies</title>
+        <link href="output.css" rel="stylesheet">
+        <script src="index.js" defer></script>
 	</head>
-	<body>
-        
-    </body>
+	<body class="bg-gray-800">
+		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2">
+			<div class="bg-blue-900 w-fit px-3 py-3 rounded-full flex justify-start overflow-hidden text-white">
+				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
+				<input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
+			</div>
+            <img class="svg" src="../svg/bookmark.svg" alt="view saved movies">
+		</header>
+	</body>
 </html>

@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.svg:hover {
+    cursor: pointer;
+}
