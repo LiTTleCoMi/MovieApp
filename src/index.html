@@ -4,16 +4,149 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Movies</title>
-        <link href="output.css" rel="stylesheet">
-        <script src="index.js" defer></script>
+		<link href="output.css" rel="stylesheet" />
+		<script src="../js/index.js" defer></script>
+		<script src="../js/search.js" defer></script>
+		<script src="../js/poster.js" defer></script>
 	</head>
 	<body class="bg-gray-800">
 		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2">
-			<div class="bg-blue-900 w-fit px-3 py-3 rounded-full flex justify-start overflow-hidden text-white">
+			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
 				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
 				<input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
 			</div>
-            <img class="svg" src="../svg/bookmark.svg" alt="view saved movies">
+			<div class="bg-blue-900 p-3 rounded-full">
+				<a href="./library.html">
+					<img class="svg" src="../svg/bookmark.svg" alt="view saved movies" />
+				</a>
+			</div>
 		</header>
+
+		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
+			<h2 class="text-4xl w-full text-center">Most Popular</h2>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+                <div class="flex flex-col gap-y-2">
+                    <h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+                    <span class="text-xl w-full">Jan 17, 2015</span>
+                </div>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+					</div>
+				</div>
+				<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+			</div>
+		</main>
 	</body>
 </html>
