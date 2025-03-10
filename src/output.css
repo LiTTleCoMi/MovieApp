@@ -346,27 +346,6 @@
   .bg-gray-800 {
     background-color: var(--color-gray-800);
   }
-  .bg-\[url\(\$\{\"i\"\}\)\] {
-    background-image: url(${"i"});
-  }
-  .bg-\[url\(\$\{imagesBasePath\}\$\{movie\.poster_path\}\)\] {
-    background-image: url(${imagesBasePath}${movie.poster_path});
-  }
-  .bg-\[url\(\$\{imagesBasePath\}\$\{\}\)\] {
-    background-image: url(${imagesBasePath}${});
-  }
-  .bg-\[url\(\$\{imagesBasePath\}\)\] {
-    background-image: url(${imagesBasePath});
-  }
-  .bg-\[url\(\$\{ima\}\)\] {
-    background-image: url(${ima});
-  }
-  .bg-\[url\(\$\{\}\)\] {
-    background-image: url(${});
-  }
-  .bg-\[url\(\)\] {
-    background-image: url();
-  }
   .bg-\[url\(\.\.\/images\/movie-poster\.jpg\)\] {
     background-image: url(../images/movie-poster.jpg);
   }
