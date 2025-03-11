@@ -53,7 +53,7 @@ function displayMovies(moviesObj, search = null) {
 	console.log(element.innerHTML)
 	for (let movie of moviesObj.results) {
 		element.innerHTML += `
-        <div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+        <div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
             <div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
                 <div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
                     <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
@@ -61,9 +61,9 @@ function displayMovies(moviesObj, search = null) {
                     <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
                 </div>
             </div>
-            <div class="flex flex-col gap-y-2">
-                <h3 class="text-4xl font-semibold">${movie.original_title}</h3>
-                <span class="text-xl w-full">${movie.release_date}</span>
+            <div class="flex w-[50%] sm:w-full flex-col gap-y-2">
+                <h3 class="text-2xl sm:text-4xl font-semibold">${movie.original_title}</h3>
+                <span class="text-sm sm:text-xl w-full">${movie.release_date}</span>
             </div>
         </div>`;
 	}

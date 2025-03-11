@@ -14,10 +14,14 @@
 		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2">
 			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
 				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
-                <form onsubmit="performSearch(event)">
-                    <input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
-                </form>
-				</div>
+				<form onsubmit="performSearch(event)">
+					<input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
+				</form>
+			</div>
+			<div class="flex justify-between gap-x-1">
+				<img src="../svg/arrow_drop_down.svg" alt="drop down list of categories" />
+				<span class="text-xl">Categories</span>
+			</div>
 			<div class="bg-blue-900 p-3 rounded-full">
 				<a href="./library.html">
 					<img class="svg" src="../svg/bookmark.svg" alt="view saved movies" />
@@ -35,10 +39,10 @@
 						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 					</div>
 				</div>
-                <div class="flex flex-col gap-y-2">
-                    <h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
-                    <span class="text-xl w-full">Jan 17, 2015</span>
-                </div>
+				<div class="flex flex-col gap-y-2">
+					<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+					<span class="text-xl w-full">Jan 17, 2015</span>
+				</div>
 			</div>
 		</main>
 	</body>
