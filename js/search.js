@@ -61,7 +61,7 @@ function displayPages(moviesObj) {
 	const pageQuery = urlParams.get("page");
 
 	const totalPages = moviesObj.total_pages;
-	let currentPage = 
+	let currentPage = parseInt(pageQuery)
 	document.getElementById("page-selector");
 	if (totalPages > 5) {
 
