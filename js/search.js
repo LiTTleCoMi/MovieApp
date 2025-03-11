@@ -32,6 +32,15 @@ function performSearchFunction() {
 			})
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
+	} else {
+		fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1", options)
+			.then((res) => res.json())
+			.then((res) => {
+				console.log(res);
+				return res;
+			})
+			.then((res) => displayMovies(res, { category: "Most Popular" }))
+			.catch((err) => console.error(err));
 	}
 }
 
@@ -46,11 +55,27 @@ function performSearch(event) {
 	}
 }
 
+function displayPages(moviesObj) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const searchQuery = urlParams.get("search");
+	const pageQuery = urlParams.get("page");
+
+	const totalPages = moviesObj.total_pages;
+	let currentPage = 
+	document.getElementById("page-selector");
+	if (totalPages > 5) {
+
+	} else {
+
+	}
+}
+
 function displayMovies(moviesObj, search = null) {
-	let element = document.querySelector("main");
+	let element = document.getElementById("movies");
 	let imagesBasePath = "https://media.themoviedb.org/t/p/w440_and_h660_face";
-	element.innerHTML = `<h2 class="text-4xl w-full text-center">${search.search ? 'Results for: "' + search.search + '"' : search.category}</h2>`;
-	console.log(element.innerHTML)
+	let resultsText = document.getElementById("results-text");
+	resultsText.innerText = `${search.search ? 'Results for: "' + search.search + '"' : search.category}`;
+	element.innerHTML = "";
 	for (let movie of moviesObj.results) {
 		element.innerHTML += `
         <div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
@@ -67,6 +92,7 @@ function displayMovies(moviesObj, search = null) {
             </div>
         </div>`;
 	}
+	displayPages(moviesObj);
 }
 // adult: false;
 // backdrop_path: "/bfh9Z3Ghz4FOJAfLOAhmc3ccnHU.jpg";

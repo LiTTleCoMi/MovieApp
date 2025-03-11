@@ -11,18 +11,19 @@
 	</head>
 
 	<body class="bg-gray-800">
-		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2">
-			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
+		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2 relative">
+			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white z-1">
 				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
 				<form onsubmit="performSearch(event)">
-					<input id="search-bar" class="w-0 focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
+					<input id="search-bar" class="w-0 max-w-[300px] focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
 				</form>
 			</div>
-			<div class="flex justify-between gap-x-1">
-				<img src="../svg/arrow_drop_down.svg" alt="drop down list of categories" />
-				<span class="text-xl">Categories</span>
+			<div class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-y-2 z-0">
+				<div class="flex justify-between gap-x-1">
+					<a class="text-2xl" href="../src/index.html">Home</a>
+				</div>
 			</div>
-			<div class="bg-blue-900 p-3 rounded-full">
+			<div class="bg-blue-900 p-3 rounded-full z-1">
 				<a href="./library.html">
 					<img class="svg" src="../svg/bookmark.svg" alt="view saved movies" />
 				</a>
@@ -30,19 +31,38 @@
 		</header>
 
 		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
-			<h2 class="text-4xl w-full text-center">Most Popular</h2>
-			<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
-				<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
-					<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
-						<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-						<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
-						<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+			<h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
+			<div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
+				<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+					<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+						<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+							<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+							<img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+							<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+						</div>
+					</div>
+					<div class="flex flex-col gap-y-2">
+						<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
+						<span class="text-xl w-full">Jan 17, 2015</span>
 					</div>
 				</div>
-				<div class="flex flex-col gap-y-2">
-					<h3 class="text-4xl font-semibold">Star Wars: The Force Awakens</h3>
-					<span class="text-xl w-full">Jan 17, 2015</span>
+			</div>
+			<div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 rounded-full">
+				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					1
+				</button>
+				<button class="bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					2
+				</button>
+				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					3
+				</button>
+				<div class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
+					<input class="w-full text-center focus:outline-none" placeholder="..." />
 				</div>
+				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					10
+				</button>
 			</div>
 		</main>
 	</body>
