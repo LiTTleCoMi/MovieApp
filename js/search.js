@@ -46,7 +46,6 @@ function performSearchFunction() {
 
 function performSearch(event) {
 	event.preventDefault();
-	console.log("ran");
 	let element = document.getElementById("search-bar");
 	const query = element.value.trim();
 	if (query) {
@@ -55,18 +54,64 @@ function performSearch(event) {
 	}
 }
 
-function displayPages(moviesObj) {
+function changePage(page) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-	const pageQuery = urlParams.get("page");
+	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${page}`);
+	performSearchFunction();
+}
+
+function displayPages(moviesObj) {
+	const urlParams = new URLSearchParams(window.location.search);
+	console.log("Page Changed");
+	const searchQuery = urlParams.get("search");
 
 	const totalPages = moviesObj.total_pages;
-	let currentPage = parseInt(pageQuery)
-	document.getElementById("page-selector");
-	if (totalPages > 5) {
-
+	const currentPage = moviesObj.page;
+	let pageElement = document.getElementById("page-selector");
+	pageElement.innerHTML = "";
+	if (totalPages > 6) {
+		pageElement.innerHTML += `
+			<button onclick="changePage(${1})" class="${1 === currentPage ? "" : "hover:"}bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+				${1}
+			</button>`;
+		if (currentPage < totalPages - 2) {
+			if (currentPage !== 1) {
+				console.log('ran')
+				pageElement.innerHTML += `
+				<button onclick="changePage(${currentPage})" class="bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					${currentPage}
+				</button>`
+			}
+			pageElement.innerHTML += `
+				<button onclick="changePage(${currentPage + 1})" class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					${currentPage + 1}
+				</button>
+				<form class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
+					<input class="w-full text-center focus:outline-none" placeholder="..." />
+				</form>`;
+		} else {
+			pageElement.innerHTML += `
+				<form class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
+					<input class="w-full text-center focus:outline-none" placeholder="..." />
+				</form>`;
+			for (let i = totalPages - 2; i < totalPages; i++) {
+				pageElement.innerHTML += `
+					<button onclick="changePage(${i})" class="${i === currentPage ? "" : "hover:"}bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+						${i}
+					</button>`;
+			}
+		}
+		pageElement.innerHTML += `
+			<button onclick="changePage(${totalPages})" class="${totalPages === currentPage ? "" : "hover:"}bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+				${totalPages}
+			</button>`;
 	} else {
-
+		for (let i = 1; i <= totalPages; i++)
+			pageElement.innerHTML += `
+		<button onclick="changePage(${i})" class="${i === currentPage ? "" : "hover:"}bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+			${i}
+		</button>`;
 	}
 }
 
@@ -111,4 +156,7 @@ function displayMovies(moviesObj, search = null) {
 
 (() => {
 	performSearchFunction();
+	window.addEventListener("popstate", () => {
+		performSearchFunction();
+	});
 })();
