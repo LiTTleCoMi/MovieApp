@@ -20,7 +20,7 @@
 			</div>
 			<div class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-y-2 z-0">
 				<div class="flex justify-between gap-x-1">
-					<a class="text-2xl" href="../src/index.html">Home</a>
+					<a class="text-2xl" href="../src/index.html?page=1">Home</a>
 				</div>
 			</div>
 			<div class="bg-blue-900 p-3 rounded-full z-1">
@@ -47,22 +47,8 @@
 					</div>
 				</div>
 			</div>
-			<div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 rounded-full">
-				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
-					1
-				</button>
-				<button class="bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
-					2
-				</button>
-				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
-					3
-				</button>
-				<form class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
-					<input class="w-full text-center focus:outline-none" placeholder="..." />
-				</form>
-				<button class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
-					10
-				</button>
+            <div class="w-full flex justify-center items-center">
+                <div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
 			</div>
 		</main>
 	</body>
