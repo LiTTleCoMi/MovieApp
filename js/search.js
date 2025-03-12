@@ -79,14 +79,21 @@ function displayPages(moviesObj) {
 			if (currentPage !== 1) {
 				console.log('ran')
 				pageElement.innerHTML += `
-				<button onclick="changePage(${currentPage})" class="bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
-					${currentPage}
-				</button>`
+					<button onclick="changePage(${currentPage})" class="bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+						${currentPage}
+					</button>`
 			}
 			pageElement.innerHTML += `
 				<button onclick="changePage(${currentPage + 1})" class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
 					${currentPage + 1}
-				</button>
+				</button>`
+			if (currentPage === 1) {
+				pageElement.innerHTML += `
+				<button onclick="changePage(${currentPage + 2})" class="hover:bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
+					${currentPage + 2}
+				</button>`;
+			}
+			pageElement.innerHTML += `
 				<form class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
 					<input class="w-full text-center focus:outline-none" placeholder="..." />
 				</form>`;
