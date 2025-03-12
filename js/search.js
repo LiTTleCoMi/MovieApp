@@ -15,9 +15,9 @@ function shrinkSearch() {
 function performSearchFunction() {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-    const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
-    
-	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${pageQuery}`);
+	const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
+
+	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${pageQuery ? pageQuery : 1}`);
 
 	const options = {
 		method: "GET",
@@ -28,7 +28,7 @@ function performSearchFunction() {
 	};
 
 	if (searchQuery) {
-		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=en-US&page=${pageQuery}`, options)
+		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=en-US&page=${pageQuery ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -37,7 +37,7 @@ function performSearchFunction() {
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
 	} else {
-		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pageQuery}`, options)
+		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pageQuery ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -66,17 +66,17 @@ function changePage(page) {
 }
 
 function customPageSelection(event) {
-    event.preventDefault();
-    const urlParams = new URLSearchParams(window.location.search);
+	event.preventDefault();
+	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-    const input = document.getElementById("page-selector").querySelector("input")
-    window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${parseInt(input.value)}`);
+	const input = document.getElementById("page-selector").querySelector("input");
+	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${parseInt(input.value)}`);
 
-    performSearchFunction();
+	performSearchFunction();
 }
 
-function displayPages (moviesObj) {
-    let form = `
+function displayPages(moviesObj) {
+	let form = `
         <form onsubmit="customPageSelection(event)" class="flex justify-center items-center w-9 h-9 rounded-full hover:bg-blue-900">
             <input type="number" step="1" class="w-full text-center focus:outline-none" placeholder="..." />
         </form>`;
@@ -109,9 +109,9 @@ function displayPages (moviesObj) {
 					${currentPage + 2}
 				</button>`;
 			}
-			pageElement.innerHTML += form
+			pageElement.innerHTML += form;
 		} else {
-			pageElement.innerHTML += form
+			pageElement.innerHTML += form;
 			for (let i = totalPages - 2; i < totalPages; i++) {
 				pageElement.innerHTML += `
 					<button onclick="changePage(${i})" class="${i === currentPage ? "" : "hover:"}bg-blue-900 w-9 h-9 rounded-full flex justify-center items-center transition-colors duration-300">
