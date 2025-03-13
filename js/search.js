@@ -1,4 +1,5 @@
 const imagesBasePath = "https://media.themoviedb.org/t/p/w440_and_h660_face";
+var savedMovies = [];
 
 function expandSearch() {
 	let element = document.getElementById("search-bar");
@@ -36,7 +37,7 @@ function performSearchFunction() {
 			})
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
-    } else {
+	} else {
 		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
@@ -144,7 +145,7 @@ function displayMovies(moviesObj, search = null) {
                 <div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
                     <div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
                         <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-                        <img class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+                        <img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
                         <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
                     </div>
                 </div>
@@ -169,3 +170,46 @@ function displayMovies(moviesObj, search = null) {
 		performSearchFunction();
 	});
 })();
+
+function saveMovie(id, original_title, release_date, poster_path) {
+	// Update the save icon
+	let iconsContainer = document.getElementById(`${id}`).querySelector("div");
+
+	iconsContainer.innerHTML = `
+		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+		<img onclick="unsaveMovie(${id}, '${original_title}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+	`;
+
+	const movie = {
+		id: id,
+		title: original_title,
+		date: release_date,
+		poster: poster_path,
+		time_saved: Date.now(),
+	};
+	let savedMovies = localStorage.getItem("savedMovies");
+	savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
+	savedMovies.push(movie);
+	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+
+	console.log(JSON.parse(localStorage.getItem("savedMovies")));
+}
+
+function unsaveMovie(id, original_title, release_date, poster_path) {
+	// Update the save icon
+	let iconsContainer = document.getElementById(`${id}`).querySelector("div");
+
+	iconsContainer.innerHTML = `
+		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+		<img onclick="saveMovie(${id}, '${original_title}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+	`;
+
+	let savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+	savedMovies = savedMovies.filter(movie => {
+		return movie.id !== id;
+	})
+	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+	console.log(JSON.parse(localStorage.getItem("savedMovies")));
+}
