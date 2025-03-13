@@ -17,7 +17,7 @@ function performSearchFunction() {
 	const searchQuery = urlParams.get("search");
 	const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
 
-	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${pageQuery ? pageQuery : 1}`);
+	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${!isNaN(pageQuery) ? pageQuery : 1}`);
 
 	const options = {
 		method: "GET",
@@ -28,7 +28,7 @@ function performSearchFunction() {
 	};
 
 	if (searchQuery) {
-		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=en-US&page=${pageQuery ? pageQuery : 1}`, options)
+		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=en-US&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -36,8 +36,8 @@ function performSearchFunction() {
 			})
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
-	} else {
-		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pageQuery ? pageQuery : 1}`, options)
+    } else {
+		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
