@@ -1,9 +1,11 @@
 const imagesBasePath = "https://media.themoviedb.org/t/p/w440_and_h660_face";
 var savedMovies = [];
+languageSetting = 'en';
+availableLangs = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'cn', 'ja', 'ko', 'ar', 'hi', 'tr', 'nl', 'sv', 'pl', 'he', 'id', 'el', 'th', 'vi'];
 
 function expandSearch() {
 	let element = document.getElementById("search-bar");
-	element.style.width = "40vw";
+	element.style.width = "50vw";
 	element.style.paddingLeft = "10px";
 	element.focus();
 }
@@ -29,7 +31,7 @@ function performSearchFunction() {
 	};
 
 	if (searchQuery) {
-		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=en-US&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
+		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=${languageSetting}&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -38,7 +40,7 @@ function performSearchFunction() {
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
 	} else {
-		fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
+		fetch(`https://api.themoviedb.org/3/movie/popular?language=${languageSetting}&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -140,20 +142,22 @@ function displayMovies(moviesObj, search = null) {
 	element.innerHTML = "";
 	if (moviesObj.results) {
 		for (let movie of moviesObj.results) {
-			element.innerHTML += `
-            <div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
-                <div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
-                    <div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
-                        <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-                        <img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
-                        <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
-                    </div>
-                </div>
-                <div class="flex w-[50%] sm:w-full flex-col gap-y-2">
-                    <h3 class="text-2xl sm:text-4xl font-semibold">${movie.original_title}</h3>
-                    <span class="text-sm sm:text-xl w-full">${movie.release_date}</span>
-                </div>
-            </div>`;
+			if (movie.original_language === languageSetting || languageSetting === "any") {
+				element.innerHTML += `
+				<div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
+					<div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
+						<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
+							<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+							<img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+							<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+						</div>
+					</div>
+					<div class="flex w-[50%] sm:w-full flex-col gap-y-2">
+						<h3 class="text-2xl sm:text-4xl font-semibold">${movie.original_title}</h3>
+						<span class="text-sm sm:text-xl w-full">${movie.release_date}</span>
+					</div>
+				</div>`;
+			}
 		}
 	} else if (moviesObj.total_pages < moviesObj.page) {
 		window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${Math.max(1, Math.min(moviesObj.total_pages, 500))}`);

@@ -11,27 +11,39 @@
 	</head>
 
 	<body class="bg-gray-800">
-		<header class="bg-blue-950 flex justify-between items-center px-6 py-5 gap-x-2 relative">
-			<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white z-1">
-				<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
-				<form onsubmit="performSearch(event)">
-					<input id="search-bar" class="w-0 max-w-[300px] focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
-				</form>
-			</div>
-			<div class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-y-2 z-0">
-				<div class="flex justify-between gap-x-1">
+		<header class="bg-blue-950 flex justify-end items-end px-6 py-5 gap-x-2 relative w-full">
+			<div class="flex justify-between items-center w-full">
+				<div class="w-full"></div>
+				<div class="flex justify-center w-full">
 					<a class="text-2xl" href="../src/index.html?page=1">Home</a>
 				</div>
+				<div class="flex flex-col-reverse sm:flex-row justify-end items-end sm:items-center gap-x-3 w-full">
+					<div class="bg-blue-900 p-3 rounded-full z-1">
+						<a href="./library.html">
+							<img class="svg" src="../svg/menu.svg" alt="drop down more options" />
+						</a>
+					</div>
+				</div>
 			</div>
-			<div class="bg-blue-900 p-3 rounded-full z-1">
-				<a href="./library.html">
-					<img class="svg" src="../svg/bookmark.svg" alt="view saved movies" />
-				</a>
+			<div class="absolute left-0 pl-6 top-[50%] tranform -translate-y-1/2 z-100">
+				<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
+					<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
+					<form onsubmit="performSearch(event)">
+						<input id="search-bar" class="w-0 max-w-[300px] focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
+					</form>
+				</div>
 			</div>
 		</header>
 
-		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
+		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative">
 			<h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
+			<div class="absolute top-0 right-0 flex flex-col items-start gap-y-2 p-2 bg-blue-900 rounded-b-2xl overflow-hidden text-lg sm:text-xl">
+				<a href="library.html">Favorites</a>
+				<div class="flex">
+					<span>Language</span>
+					<img class="svg" src="../svg/arrow_drop_down.svg">
+				</div>
+			</div>
 			<div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
 				<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
 					<div id="movie-1" class="flex flex-col justify-end items-center bg-[url(../images/movie-poster.jpg)] bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
@@ -47,8 +59,8 @@
 					</div>
 				</div>
 			</div>
-            <div class="w-full flex justify-center items-center">
-                <div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
+			<div class="w-full flex justify-center items-center">
+				<div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
 			</div>
 		</main>
 	</body>

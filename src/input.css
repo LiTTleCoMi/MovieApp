@@ -4,6 +4,11 @@
     color: #DEF;
 }
 
+.svg {
+    min-width: 24px;
+    flex-shrink: 0;
+}
+
 .svg:hover {
     cursor: pointer;
 }
