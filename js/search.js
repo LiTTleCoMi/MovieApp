@@ -1,7 +1,46 @@
 const imagesBasePath = "https://media.themoviedb.org/t/p/w440_and_h660_face";
 var savedMovies = [];
-languageSetting = 'en';
-availableLangs = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'cn', 'ja', 'ko', 'ar', 'hi', 'tr', 'nl', 'sv', 'pl', 'he', 'id', 'el', 'th', 'vi'];
+var languageSetting = "en";
+const languageCodes = {
+	English: "en",
+	Spanish: "es",
+	French: "fr",
+	German: "de",
+	Italian: "it",
+	Portuguese: "pt",
+	Dutch: "nl",
+	Russian: "ru",
+	Chinese: "zh",
+	Japanese: "ja",
+	Korean: "ko",
+	Arabic: "ar",
+	Hindi: "hi",
+	Greek: "el",
+	Hebrew: "he",
+	Turkish: "tr",
+	Polish: "pl",
+	Swedish: "sv",
+	Danish: "da",
+	Finnish: "fi",
+	Thai: "th",
+	Vietnamese: "vi",
+};
+
+function toggleLangSelect () {
+	const menuElement = document.getElementById("menu-drop-down");
+	const langSelectContainer = document.getElementById("language-selection-container");
+	if (!langSelectContainer.innerHTML.trim()) {
+		langSelectContainer.innerHTML = `
+            <div class="h-[30vh] flex flex-col items-start gap-y-2 p-2 bg-blue-900 rounded-bl-2xl overflow-x-hidden overflow-y-auto text-base sm:text-lg">
+            </div>`;
+        const langSelect = langSelectContainer.querySelector("div");
+        Object.keys(languageCodes).forEach(language => {
+            langSelect.innerHTML += `<span>${language}</span>`
+        })
+	} else {
+		langSelectContainer.innerHTML = "";
+	}
+}
 
 function expandSearch() {
 	let element = document.getElementById("search-bar");
@@ -211,9 +250,9 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 	`;
 
 	let savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
-	savedMovies = savedMovies.filter(movie => {
+	savedMovies = savedMovies.filter((movie) => {
 		return movie.id !== id;
-	})
+	});
 	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
 	console.log(JSON.parse(localStorage.getItem("savedMovies")));
 }
