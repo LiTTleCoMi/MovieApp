@@ -43,15 +43,25 @@ function toggleMenu() {
 	} else {
 		menuElement.innerHTML = "";
 	}
-	menuElement.focus();
 
 	function handleBlur(event) {
+		const menuElementChildren = Array.from(menuElement.children);
+		console.log(menuElementChildren);
+
 		if (menuButtonElement.contains(event.target)) {
 			document.removeEventListener("mousedown", handleBlur);
-		} else if (!menuElement.contains(event.target)) {
-			console.log("Blur (clicked outside)");
-			menuElement.innerHTML = "";
-			document.removeEventListener("mousedown", handleBlur);
+        } else {
+            let contains = false;
+            for (let child of menuElementChildren) {
+                if (child.contains(event.target)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+				menuElement.innerHTML = "";
+				document.removeEventListener("mousedown", handleBlur);
+			}
 		}
 	}
 	document.addEventListener("mousedown", handleBlur);
@@ -269,7 +279,6 @@ function displayMovies(moviesObj, search = null) {
                         <img onclick="unsaveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
                         <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
                     `;
-				console.log(`Saved Movie: ${movie.original_title}`);
 			}
 		}
 	} else {

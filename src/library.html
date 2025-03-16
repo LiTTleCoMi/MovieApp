@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Movies</title>
+		<link href="output.css" rel="stylesheet" />
+		<script src="../js/index.js" defer></script>
+		<script src="../js/search.js" defer></script>
+		<script src="../js/poster.js" defer></script>
+	</head>
+
+	<body class="bg-gray-800">
+		<header class="bg-blue-950 flex justify-end items-end px-6 py-5 gap-x-2 relative w-full">
+			<div class="flex justify-between items-center w-full">
+				<div class="w-full"></div>
+				<div class="flex justify-center w-full">
+					<a class="text-2xl sm:text-3xl" href="../src/index.html?page=1">Home</a>
+				</div>
+				<div class="flex flex-col-reverse sm:flex-row justify-end items-end sm:items-center gap-x-3 w-full">
+					<div class="bg-blue-900 p-3 rounded-full z-1">
+						<img onclick="toggleMenu()" id="menu" class="svg" src="../svg/menu.svg" alt="drop down more options" />
+					</div>
+				</div>
+			</div>
+			<div class="absolute left-0 pl-6 top-[50%] tranform -translate-y-1/2 z-100">
+				<div class="bg-blue-900 w-fit p-3 rounded-full flex justify-start overflow-hidden text-white">
+					<img class="svg" onclick="expandSearch()" src="../svg/search.svg" alt="search for movies" />
+					<form onsubmit="performSearch(event)">
+						<input id="search-bar" class="w-0 max-w-[300px] focus:outline-none" onblur="shrinkSearch()" placeholder="Search..." />
+					</form>
+				</div>
+			</div>
+		</header>
+
+		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative">
+			<h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
+			<div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
+
+			<div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start w-full"></div>
+			<div class="w-full flex justify-center items-center">
+				<div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
+			</div>
+		</main>
+	</body>
+</html>
