@@ -1,6 +1,5 @@
 const imagesBasePath = "https://media.themoviedb.org/t/p/w440_and_h660_face";
-var savedMovies = [];
-var languageSetting = "en";
+var allSavedMovies = [];
 const languageCodes = {
 	English: "en",
 	Spanish: "es",
@@ -31,11 +30,11 @@ function toggleMenu() {
 	const menuElement = document.getElementById("menu-drop-down");
 	if (!menuElement.innerHTML.trim()) {
 		menuElement.innerHTML = `
-            <div class="h-fit flex flex-col items-start bg-blue-950 rounded-b-2xl overflow-hidden text-lg sm:text-xl">
+            <div class="h-fit flex flex-col items-start bg-blue-950 rounded-b-2xl overflow-hidden text-xl">
                 <a class="w-full" href="library.html">
-                    <button class="hover:bg-black/20 hover:cursor-pointer w-full px-2 py-1 text-left">Favorites</button>
+                    <button class="hover:bg-black/20 hover:cursor-pointer w-full px-3 py-2 text-left">Favorites</button>
                 </a>
-                <div class="flex justify-center items-center hover:bg-black/20 w-full px-2 py-1 text-left">
+                <div class="flex justify-center items-center hover:bg-black/20 w-full px-3 py-2 text-left">
                     <button onclick="toggleLangSelect()" class="cursor-pointer">Language</button>
                     <img onclick="toggleLangSelect()" class="svg" src="../svg/arrow_drop_down.svg" />
                 </div>
@@ -63,7 +62,7 @@ function toggleLangSelect() {
 	let langSelect = langSelectContainer.querySelector("#language-selection");
 	if (!langSelect) {
 		langSelectContainer.innerHTML = `
-            <div id="language-selection" class="h-[30vh] flex flex-col items-start overflow-x-hidden overflow-y-auto text-base sm:text-lg">
+            <div id="language-selection" class="h-[30vh] flex flex-col items-start overflow-x-hidden overflow-y-auto text-lg">
             </div>`;
 		let langSelect = langSelectContainer.querySelector("#language-selection");
 		Object.entries(languageCodes).forEach(([language, abbreviation]) => {
@@ -74,9 +73,14 @@ function toggleLangSelect() {
 	}
 }
 
-function switchLang (lang) {
-    languageSetting = lang;
-    console.log(languageSetting)
+function switchLang(lang) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const searchQuery = urlParams.get("search");
+	const pageQuery = urlParams.get("page");
+
+	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${pageQuery}`);
+
+	performSearchFunction();
 }
 
 function expandSearch() {
@@ -93,11 +97,27 @@ function shrinkSearch() {
 
 function performSearchFunction() {
 	const urlParams = new URLSearchParams(window.location.search);
-	const searchQuery = urlParams.get("search");
-    const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
-    const languageQuery = urlParams.get("language");
 
-	window.history.pushState({}, "", `?language=${languageSetting}&${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${!isNaN(pageQuery) ? pageQuery : 1}`);
+	// validate search query
+	const searchQuery = urlParams.get("search");
+
+	// validate page query
+	let page = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
+	const pageQuery = !isNaN(page) ? page : 1;
+
+	// validate language query
+	let language = urlParams.get("language");
+	let languageQuery = "";
+	Object.values(languageCodes).forEach((languageCode) => {
+		if (language === languageCode) {
+			languageQuery = language;
+		}
+	});
+	if (!languageQuery) {
+		languageQuery = "en";
+	}
+
+	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${pageQuery}`);
 
 	const options = {
 		method: "GET",
@@ -108,7 +128,7 @@ function performSearchFunction() {
 	};
 
 	if (searchQuery) {
-		fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchQuery)}&include_adult=false&language=${languageSetting}&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
+		fetch(`https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=${languageQuery}&page=${pageQuery}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -117,7 +137,7 @@ function performSearchFunction() {
 			.then((res) => displayMovies(res, { search: searchQuery }))
 			.catch((err) => console.error(err));
 	} else {
-		fetch(`https://api.themoviedb.org/3/movie/popular?language=${languageSetting}&page=${!isNaN(pageQuery) ? pageQuery : 1}`, options)
+		fetch(`https://api.themoviedb.org/3/movie/popular?language=${languageQuery}&page=${pageQuery}`, options)
 			.then((res) => res.json())
 			.then((res) => {
 				console.log(res);
@@ -131,10 +151,10 @@ function performSearchFunction() {
 function performSearch(event) {
 	event.preventDefault();
 	const urlParams = new URLSearchParams(window.location.search);
-    const languageQuery = urlParams.get("language");
-	const query = document.getElementById("search-bar").value.trim();
-	if (query) {
-		window.history.pushState({}, "", `?language=${languageSetting}&search=${encodeURIComponent(query)}&page=1`);
+	const languageQuery = urlParams.get("language");
+	const searchQuery = document.getElementById("search-bar").value.trim();
+	if (searchQuery) {
+		window.history.pushState({}, "", `?language=${languageQuery}&search=${encodeURIComponent(searchQuery)}&page=1`);
 		performSearchFunction();
 	}
 }
@@ -142,16 +162,18 @@ function performSearch(event) {
 function changePage(page) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${page}`);
+	const languageQuery = urlParams.get("language");
+	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
 	performSearchFunction();
 }
 
 function customPageSelection(event) {
 	event.preventDefault();
 	const urlParams = new URLSearchParams(window.location.search);
+	const languageQuery = urlParams.get("language");
 	const searchQuery = urlParams.get("search");
-	const input = document.getElementById("page-selector").querySelector("input");
-	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${parseInt(input.value)}`);
+	const page = parseInt(document.getElementById("page-selector").querySelector("input").value);
+	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
 
 	performSearchFunction();
 }
@@ -162,10 +184,9 @@ function displayPages(moviesObj) {
             <input type="number" step="1" class="w-full text-center focus:outline-none" placeholder="..." />
         </form>`;
 
-	const urlParams = new URLSearchParams(window.location.search);
-	const searchQuery = urlParams.get("search");
 	const totalPages = Math.max(1, Math.min(moviesObj.total_pages, 500));
 	const currentPage = moviesObj.page;
+
 	let pageElement = document.getElementById("page-selector");
 	pageElement.innerHTML = "";
 	if (totalPages > 6) {
@@ -214,32 +235,43 @@ function displayPages(moviesObj) {
 }
 
 function displayMovies(moviesObj, search = null) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const languageQuery = urlParams.get("language");
+
 	let element = document.getElementById("movies");
 	let resultsText = document.getElementById("results-text");
-	resultsText.innerText = `${search.search ? 'Results for: "' + search.search + '"' : search.category}`;
+	resultsText.innerText = `${search.search ? 'Results for: "' + decodeURIComponent(search.search) + '"' : search.category}`;
 	element.innerHTML = "";
 	if (moviesObj.results) {
 		for (let movie of moviesObj.results) {
-			if (movie.original_language === languageSetting || languageSetting === "any") {
+			if (movie.original_language === languageQuery || true) {
 				element.innerHTML += `
 				<div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
 					<div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
 						<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
 							<img class="svg w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-							<img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="svg w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+							<img onclick="saveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="svg w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
 							<img class="svg w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 						</div>
 					</div>
-					<div class="flex w-[50%] sm:w-full flex-col gap-y-2">
+					<div class="flex flex-col text-center w-[50%] sm:w-full gap-y-2">
 						<h3 class="text-2xl sm:text-4xl font-semibold">${movie.original_title}</h3>
 						<span class="text-sm sm:text-xl w-full">${movie.release_date}</span>
 					</div>
 				</div>`;
 			}
+
+			let iconsContainer = document.getElementById(`${movie.id}`)?.querySelector("div");
+			const savedMovies = JSON.parse(localStorage.getItem("savedMovies")) || [];
+			if (savedMovies.some((mov) => mov.id === movie.id)) {
+				iconsContainer.innerHTML = `
+                        <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
+                        <img onclick="unsaveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+                        <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+                    `;
+				console.log(`Saved Movie: ${movie.original_title}`);
+			}
 		}
-	} else if (moviesObj.total_pages < moviesObj.page) {
-		window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${Math.max(1, Math.min(moviesObj.total_pages, 500))}`);
-		performSearchFunction();
 	} else {
 		element.innerHTML = "<div class='font-bold text-6xl'>No Results</div>";
 	}
@@ -254,12 +286,13 @@ function displayMovies(moviesObj, search = null) {
 })();
 
 function saveMovie(id, original_title, release_date, poster_path) {
+	original_title = decodeURIComponent(original_title);
 	// Update the save icon
 	let iconsContainer = document.getElementById(`${id}`).querySelector("div");
 
 	iconsContainer.innerHTML = `
-		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
-		<img onclick="unsaveMovie(${id}, '${original_title}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
+		<img onclick="unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
 		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 	`;
 
@@ -279,19 +312,22 @@ function saveMovie(id, original_title, release_date, poster_path) {
 }
 
 function unsaveMovie(id, original_title, release_date, poster_path) {
+	original_title = decodeURIComponent(original_title);
 	// Update the save icon
 	let iconsContainer = document.getElementById(`${id}`).querySelector("div");
 
 	iconsContainer.innerHTML = `
 		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-		<img onclick="saveMovie(${id}, '${original_title}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+		<img onclick="saveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
 		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 	`;
 
 	let savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
-	savedMovies = savedMovies.filter((movie) => {
-		return movie.id !== id;
-	});
+	if (savedMovies) {
+		savedMovies = savedMovies.filter((movie) => {
+			return movie.id !== id;
+		});
+	}
 	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
 	console.log(JSON.parse(localStorage.getItem("savedMovies")));
 }
