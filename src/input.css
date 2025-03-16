@@ -13,25 +13,23 @@
 	cursor: pointer;
 }
 
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
 
-#language-selection-container div::-webkit-scrollbar {
+#language-selection::-webkit-scrollbar {
     width: 13px;
-    background-color: oklch(0.278 0.033 256.848);
 }
 
-#language-selection-container div::-webkit-scrollbar-track {
-    background-color: oklch(0.379 0.146 265.522);
-    border-bottom-right-radius: 1rem;
-    padding-bottom: 20px;
+#language-selection::-webkit-scrollbar-track {
+    background-color: oklch(0.282 0.091 267.935);
 }
 
-#language-selection-container div::-webkit-scrollbar-thumb {
-    border: 3.5px solid oklch(0.379 0.146 265.522);
+#language-selection::-webkit-scrollbar-thumb {
+    border: 3.5px solid oklch(0.282 0.091 267.935);
     height: 10px;
     background-color: #def;
     border-radius: 1000px;

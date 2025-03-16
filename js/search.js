@@ -26,20 +26,57 @@ const languageCodes = {
 	Vietnamese: "vi",
 };
 
-function toggleLangSelect () {
+function toggleMenu() {
+	const menuButtonElement = document.getElementById("menu");
 	const menuElement = document.getElementById("menu-drop-down");
-	const langSelectContainer = document.getElementById("language-selection-container");
-	if (!langSelectContainer.innerHTML.trim()) {
+	if (!menuElement.innerHTML.trim()) {
+		menuElement.innerHTML = `
+            <div class="h-fit flex flex-col items-start bg-blue-950 rounded-b-2xl overflow-hidden text-lg sm:text-xl">
+                <a class="w-full" href="library.html">
+                    <button class="hover:bg-black/20 hover:cursor-pointer w-full px-2 py-1 text-left">Favorites</button>
+                </a>
+                <div class="flex justify-center items-center hover:bg-black/20 w-full px-2 py-1 text-left">
+                    <button onclick="toggleLangSelect()" class="cursor-pointer">Language</button>
+                    <img onclick="toggleLangSelect()" class="svg" src="../svg/arrow_drop_down.svg" />
+                </div>
+            </div>
+            <div id="menu-drop-down-x2" class="z-100 rounded-b-2xl bg-blue-950 overflow-hidden"></div>`;
+	} else {
+		menuElement.innerHTML = "";
+	}
+	menuElement.focus();
+
+	function handleBlur(event) {
+		if (menuButtonElement.contains(event.target)) {
+			document.removeEventListener("mousedown", handleBlur);
+		} else if (!menuElement.contains(event.target)) {
+			console.log("Blur (clicked outside)");
+			menuElement.innerHTML = "";
+			document.removeEventListener("mousedown", handleBlur);
+		}
+	}
+	document.addEventListener("mousedown", handleBlur);
+}
+
+function toggleLangSelect() {
+	const langSelectContainer = document.getElementById("menu-drop-down-x2");
+	let langSelect = langSelectContainer.querySelector("#language-selection");
+	if (!langSelect) {
 		langSelectContainer.innerHTML = `
-            <div class="h-[30vh] flex flex-col items-start gap-y-2 p-2 bg-blue-900 rounded-bl-2xl overflow-x-hidden overflow-y-auto text-base sm:text-lg">
+            <div id="language-selection" class="h-[30vh] flex flex-col items-start overflow-x-hidden overflow-y-auto text-base sm:text-lg">
             </div>`;
-        const langSelect = langSelectContainer.querySelector("div");
-        Object.keys(languageCodes).forEach(language => {
-            langSelect.innerHTML += `<span>${language}</span>`
-        })
+		let langSelect = langSelectContainer.querySelector("#language-selection");
+		Object.entries(languageCodes).forEach(([language, abbreviation]) => {
+			langSelect.innerHTML += `<button onclick="switchLang('${abbreviation}')" class="w-full px-2 py-1 hover:bg-black/20 hover:cursor-pointer">${language}</button>`;
+		});
 	} else {
 		langSelectContainer.innerHTML = "";
 	}
+}
+
+function switchLang (lang) {
+    languageSetting = lang;
+    console.log(languageSetting)
 }
 
 function expandSearch() {
@@ -57,9 +94,10 @@ function shrinkSearch() {
 function performSearchFunction() {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-	const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
+    const pageQuery = Math.max(1, Math.min(parseInt(urlParams.get("page")), 500));
+    const languageQuery = urlParams.get("language");
 
-	window.history.pushState({}, "", `?${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${!isNaN(pageQuery) ? pageQuery : 1}`);
+	window.history.pushState({}, "", `?language=${languageSetting}&${searchQuery ? "search=" + encodeURIComponent(searchQuery) + "&" : ""}page=${!isNaN(pageQuery) ? pageQuery : 1}`);
 
 	const options = {
 		method: "GET",
@@ -92,10 +130,11 @@ function performSearchFunction() {
 
 function performSearch(event) {
 	event.preventDefault();
-	let element = document.getElementById("search-bar");
-	const query = element.value.trim();
+	const urlParams = new URLSearchParams(window.location.search);
+    const languageQuery = urlParams.get("language");
+	const query = document.getElementById("search-bar").value.trim();
 	if (query) {
-		window.history.pushState({}, "", `?search=${encodeURIComponent(query)}&page=1`);
+		window.history.pushState({}, "", `?language=${languageSetting}&search=${encodeURIComponent(query)}&page=1`);
 		performSearchFunction();
 	}
 }
@@ -186,9 +225,9 @@ function displayMovies(moviesObj, search = null) {
 				<div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
 					<div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
 						<div class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
-							<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-							<img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
-							<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+							<img class="svg w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+							<img onclick="saveMovie(${movie.id}, '${movie.original_title}', '${movie.release_date}', '${movie.poster_path}')" class="svg w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add_fill.svg" alt="save this movie" />
+							<img class="svg w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 						</div>
 					</div>
 					<div class="flex w-[50%] sm:w-full flex-col gap-y-2">

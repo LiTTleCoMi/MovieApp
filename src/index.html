@@ -15,11 +15,11 @@
 			<div class="flex justify-between items-center w-full">
 				<div class="w-full"></div>
 				<div class="flex justify-center w-full">
-					<a class="text-2xl" href="../src/index.html?page=1">Home</a>
+					<a class="text-2xl sm:text-3xl" href="../src/index.html?page=1">Home</a>
 				</div>
 				<div class="flex flex-col-reverse sm:flex-row justify-end items-end sm:items-center gap-x-3 w-full">
 					<div class="bg-blue-900 p-3 rounded-full z-1">
-						<img class="svg" src="../svg/menu.svg" alt="drop down more options" />
+						<img onclick="toggleMenu()" id="menu" class="svg" src="../svg/menu.svg" alt="drop down more options" />
 					</div>
 				</div>
 			</div>
@@ -35,16 +35,7 @@
 
 		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative">
 			<h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
-			<div id="menu-drop-down" class="absolute top-0 right-0 flex">
-				<div class="h-fit flex flex-col items-start gap-y-2 p-2 bg-blue-900 rounded-b-2xl overflow-hidden text-lg sm:text-xl">
-					<a href="library.html">Favorites</a>
-					<div class="flex justify-center items-center">
-						<button onclick="toggleLangSelect()" class="cursor-pointer">Language</button>
-						<img onclick="toggleLangSelect()" class="svg" src="../svg/arrow_drop_down.svg" />
-					</div>
-				</div>
-				<div id="language-selection-container" class="z-100"></div>
-			</div>
+			<div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
 
 			<div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start">
 				<div class="flex flex-col justify-center items-center gap-y-4 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
