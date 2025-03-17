@@ -5,9 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Movies</title>
 		<link href="output.css" rel="stylesheet" />
-		<script src="../js/index.js" defer></script>
 		<script src="../js/search.js" defer></script>
-		<script src="../js/poster.js" defer></script>
+		<script src="../js/saved.js" defer></script>
 	</head>
 
 	<body class="bg-gray-800">
@@ -32,15 +31,12 @@
 				</div>
 			</div>
 		</header>
-
+        
 		<main class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative">
-			<h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
+			<h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
 			<div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
 
 			<div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start w-full"></div>
-			<div class="w-full flex justify-center items-center">
-				<div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
-			</div>
 		</main>
 	</body>
 </html>

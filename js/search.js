@@ -46,19 +46,17 @@ function toggleMenu() {
 
 	function handleBlur(event) {
 		const menuElementChildren = Array.from(menuElement.children);
-		console.log(menuElementChildren);
-
 		if (menuButtonElement.contains(event.target)) {
 			document.removeEventListener("mousedown", handleBlur);
-        } else {
-            let contains = false;
-            for (let child of menuElementChildren) {
-                if (child.contains(event.target)) {
-                    contains = true;
-                    break;
-                }
-            }
-            if (!contains) {
+		} else {
+			let contains = false;
+			for (let child of menuElementChildren) {
+				if (child.contains(event.target)) {
+					contains = true;
+					break;
+				}
+			}
+			if (!contains) {
 				menuElement.innerHTML = "";
 				document.removeEventListener("mousedown", handleBlur);
 			}
@@ -88,9 +86,9 @@ function switchLang(lang) {
 	const searchQuery = urlParams.get("search");
 	const pageQuery = urlParams.get("page");
 
-	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${pageQuery}`);
+	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}${pageQuery ? "&page=" + pageQuery : ""}`);
 
-	performSearchFunction();
+	location.reload();
 }
 
 function expandSearch() {
@@ -163,9 +161,9 @@ function performSearch(event) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const languageQuery = urlParams.get("language");
 	const searchQuery = document.getElementById("search-bar").value.trim();
-	if (searchQuery) {
-		window.history.pushState({}, "", `?language=${languageQuery}&search=${encodeURIComponent(searchQuery)}&page=1`);
-		performSearchFunction();
+    if (searchQuery) {
+        console.log(searchQuery);
+        window.location.href = `index.html?language=${languageQuery}&search=${encodeURIComponent(searchQuery)}&page=1`;
 	}
 }
 
@@ -174,7 +172,7 @@ function changePage(page) {
 	const searchQuery = urlParams.get("search");
 	const languageQuery = urlParams.get("language");
 	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
-	performSearchFunction();
+	location.reload();
 }
 
 function customPageSelection(event) {
@@ -185,7 +183,7 @@ function customPageSelection(event) {
 	const page = parseInt(document.getElementById("page-selector").querySelector("input").value);
 	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
 
-	performSearchFunction();
+	location.reload();
 }
 
 function displayPages(moviesObj) {
@@ -254,7 +252,7 @@ function displayMovies(moviesObj, search = null) {
 	element.innerHTML = "";
 	if (moviesObj.results) {
 		for (let movie of moviesObj.results) {
-			if (movie.original_language === languageQuery || true) {
+			if (movie.original_language === languageQuery) {
 				element.innerHTML += `
 				<div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
 					<div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
@@ -288,10 +286,12 @@ function displayMovies(moviesObj, search = null) {
 }
 
 (() => {
-	performSearchFunction();
-	window.addEventListener("popstate", () => {
+	if (window.location.pathname.endsWith("index.html")) {
 		performSearchFunction();
-	});
+		window.addEventListener("popstate", () => {
+			performSearchFunction();
+		});
+	}
 })();
 
 function saveMovie(id, original_title, release_date, poster_path) {
@@ -314,7 +314,7 @@ function saveMovie(id, original_title, release_date, poster_path) {
 	};
 	let savedMovies = localStorage.getItem("savedMovies");
 	savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
-	savedMovies.push(movie);
+	savedMovies.unshift(movie);
 	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
 
 	console.log(JSON.parse(localStorage.getItem("savedMovies")));
