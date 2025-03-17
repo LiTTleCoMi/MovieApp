@@ -2,6 +2,7 @@
 
 npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch
 
+
 A platform for browsing and managing a collection of movies.
 
 
