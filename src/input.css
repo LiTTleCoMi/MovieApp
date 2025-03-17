@@ -4,6 +4,10 @@
 	color: #def;
 }
 
+html, body {
+    height: 100%;
+}
+
 .svg {
 	min-width: 24px;
 	flex-shrink: 0;

@@ -14,8 +14,6 @@
     --spacing: 0.25rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
-    --text-base: 1rem;
-    --text-base--line-height: calc(1.5 / 1);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
@@ -196,9 +194,6 @@
   .absolute {
     position: absolute;
   }
-  .fixed {
-    position: fixed;
-  }
   .relative {
     position: relative;
   }
@@ -226,11 +221,32 @@
   .left-1\/2 {
     left: calc(1/2 * 100%);
   }
+  .z-0 {
+    z-index: 0;
+  }
   .z-1 {
     z-index: 1;
   }
   .z-100 {
     z-index: 100;
+  }
+  .container {
+    width: 100%;
+    @media (width >= 40rem) {
+      max-width: 40rem;
+    }
+    @media (width >= 48rem) {
+      max-width: 48rem;
+    }
+    @media (width >= 64rem) {
+      max-width: 64rem;
+    }
+    @media (width >= 80rem) {
+      max-width: 80rem;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem;
+    }
   }
   .block {
     display: block;
@@ -264,6 +280,12 @@
   }
   .h-full {
     height: 100%;
+  }
+  .min-h-\[100vh\] {
+    min-height: 100vh;
+  }
+  .min-h-screen {
+    min-height: 100vh;
   }
   .w-0 {
     width: calc(var(--spacing) * 0);
@@ -362,6 +384,9 @@
   .justify-start {
     justify-content: flex-start;
   }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
   .gap-x-2 {
     column-gap: calc(var(--spacing) * 2);
   }
@@ -385,9 +410,6 @@
   }
   .overflow-y-auto {
     overflow-y: auto;
-  }
-  .rounded {
-    border-radius: 0.25rem;
   }
   .rounded-4xl {
     border-radius: var(--radius-4xl);
@@ -418,8 +440,34 @@
   .bg-gray-800 {
     background-color: var(--color-gray-800);
   }
-  .bg-\[url\(\.\.\/images\/movie-poster\.jpg\)\] {
-    background-image: url(../images/movie-poster.jpg);
+  .bg-radial {
+    --tw-gradient-position: in oklab;
+    background-image: radial-gradient(var(--tw-gradient-stops));
+  }
+  .bg-\[url\(\'\.\.\/images\/movie_backdrop\.jpg\'\)\] {
+    background-image: url('../images/movie_backdrop.jpg');
+  }
+  .from-black {
+    --tw-gradient-from: var(--color-black);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .from-black\/70 {
+    --tw-gradient-from: color-mix(in oklab, var(--color-black) 70%, transparent);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .from-50\% {
+    --tw-gradient-from-position: 50%;
+  }
+  .from-\[50\%\] {
+    --tw-gradient-from-position: 50%;
+  }
+  .to-black {
+    --tw-gradient-to: var(--color-black);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-black\/40 {
+    --tw-gradient-to: color-mix(in oklab, var(--color-black) 40%, transparent);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .bg-cover {
     background-size: cover;
@@ -474,10 +522,6 @@
   .text-6xl {
     font-size: var(--text-6xl);
     line-height: var(--tw-leading, var(--text-6xl--line-height));
-  }
-  .text-base {
-    font-size: var(--text-base);
-    line-height: var(--tw-leading, var(--text-base--line-height));
   }
   .text-lg {
     font-size: var(--text-lg);
@@ -538,13 +582,6 @@
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
         background-color: color-mix(in oklab, var(--color-black) 50%, transparent);
-      }
-    }
-  }
-  .group-hover\:opacity-0 {
-    &:is(:where(.group):hover *) {
-      @media (hover: hover) {
-        opacity: 0%;
       }
     }
   }
@@ -626,12 +663,6 @@
       line-height: var(--tw-leading, var(--text-4xl--line-height));
     }
   }
-  .sm\:text-lg {
-    @media (width >= 40rem) {
-      font-size: var(--text-lg);
-      line-height: var(--tw-leading, var(--text-lg--line-height));
-    }
-  }
   .sm\:text-xl {
     @media (width >= 40rem) {
       font-size: var(--text-xl);
@@ -656,6 +687,9 @@
 }
 * {
   color: #def;
+}
+html, body {
+  height: 100%;
 }
 .svg {
   min-width: 24px;
@@ -724,6 +758,48 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
   syntax: "*";
   inherits: false;
   initial-value: solid;
+}
+@property --tw-gradient-position {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-via {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-via-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tw-gradient-via-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --tw-gradient-to-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 100%;
 }
 @property --tw-font-weight {
   syntax: "*";

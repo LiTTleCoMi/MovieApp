@@ -1,4 +1,3 @@
-
 function loadFavorites() {
 	let savedMovies = localStorage.getItem("savedMovies");
 	savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
@@ -24,4 +23,7 @@ function loadFavorites() {
 
 (() => {
 	loadFavorites();
+	window.addEventListener("popstate", () => {
+		loadFavorites();
+	});
 })();
