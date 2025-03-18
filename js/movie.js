@@ -104,7 +104,44 @@ function getMovieDetails (idQuery = null) {
 }
 
 function displayMovieDetails (res) {
-    
+    console.log(`${imagesBasePath}${res.backdrop_path}`)
+    const main = document.querySelector('main');
+    main.innerHTML = `
+        <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
+        <div style="background-image: url('${imagesBasePath}${res.backdrop_path}')" class="bg-center bg-cover w-full h-full">
+            <div class="flex flex-col items-center h-full w-full gap-y-10 p-10 bg-radial from-black/70 from-50% to-black/40">
+                <h2 class="text-4xl font-semibold text-center">Harry Potter and The Sorcerer's Stone with some other stones and wands</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-x-15 gap-y-10 w-full max-w-5xl">
+                    <div style="background-image: url('${imagesBasePath}${res.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[18rem] aspect-[2/3] rounded-2xl overflow-hidden"></div>
+                    <div class="flex flex-col gap-y-5 text-lg">
+                        <h5 class="text-xl font-semibold text-center md:text-left">Let the magic begin.</h5>
+                        <p>Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard—with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths—and about the villain who's to blame.</p>
+                        <div class="flex flex-col min-w-fit w-full">
+                            <div class="flex w-full gap-x-5">
+                                <span class="shrink-0 w-[30%] max-w-24">Released:</span>
+                                <span class="w-full">2001-11-16</span>
+                            </div>
+                            <div class="flex w-full gap-x-5">
+                                <span class="shrink-0 w-[30%] max-w-24">Genres:</span>
+                                <span class="w-full">Adventure, Fantasy</span>
+                            </div>
+                            <div class="flex w-full gap-x-5">
+                                <span class="shrink-0 w-[30%] max-w-24">Runtime:</span>
+                                <div class="w-full flex items-center">
+                                    <img class="w-[20px]" src="../svg/clock.svg" alt="clock" />
+                                    <span>152m</span>
+                                </div>
+                            </div>
+                            <div class="flex w-full gap-x-5">
+                                <span class="shrink-0 w-[30%] max-w-24">IMDb:</span>
+                                <span class="w-full">7.6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
 }
 
 (() => {
