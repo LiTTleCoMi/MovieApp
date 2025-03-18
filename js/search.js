@@ -84,11 +84,13 @@ function toggleLangSelect() {
 function switchLang(lang) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-	const pageQuery = urlParams.get("page");
+    const pageQuery = urlParams.get("page");
+    const idQuery = urlParams.get("id");
 
-	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}${pageQuery ? "&page=" + pageQuery : ""}`);
+	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}${pageQuery ? "&page=" + pageQuery : ""}${idQuery ? "&id=" + idQuery : ""}`);
 
-	location.reload();
+    if (window.location.pathname.endsWith("index.html")) performSearchFunction();
+    if (window.location.pathname.endsWith("movie.html")) getMovieInfo();
 }
 
 function expandSearch() {
@@ -172,7 +174,8 @@ function changePage(page) {
 	const searchQuery = urlParams.get("search");
 	const languageQuery = urlParams.get("language");
 	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
-	location.reload();
+	
+    performSearchFunction();
 }
 
 function customPageSelection(event) {
@@ -183,7 +186,7 @@ function customPageSelection(event) {
 	const page = parseInt(document.getElementById("page-selector").querySelector("input").value);
 	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
 
-	location.reload();
+	performSearchFunction();
 }
 
 function displayPages(moviesObj) {
