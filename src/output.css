@@ -285,6 +285,9 @@
   .w-9 {
     width: calc(var(--spacing) * 9);
   }
+  .w-\[17rem\] {
+    width: 17rem;
+  }
   .w-\[18rem\] {
     width: 18rem;
   }
@@ -670,6 +673,11 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .sm\:w-\[18rem\] {
+    @media (width >= 40rem) {
+      width: 18rem;
     }
   }
   .sm\:w-\[45\%\] {
