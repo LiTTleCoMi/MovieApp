@@ -138,10 +138,10 @@ function displayMovieDetails (resDetails, resCredits) {
 	main.innerHTML = `
         <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
         <div style="background-image: url('${imagesBasePath}${resDetails.backdrop_path ? resDetails.backdrop_path : resDetails.poster_path}')" class="bg-center bg-cover w-full h-full">
-            <div class="flex flex-col items-center h-full w-full gap-y-10 p-10 bg-radial from-black/70 from-50% to-black/40">
+            <div class="flex flex-col justify-center items-center h-full w-full gap-y-10 p-10 bg-radial from-black/70 from-50% to-black/40">
                 <h2 class="text-4xl font-semibold text-center">${resDetails.title}</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-x-15 gap-y-10 w-full max-w-5xl">
-                    <div style="background-image: url('${imagesBasePath}${resDetails.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] aspect-[2/3] rounded-2xl overflow-hidden"></div>
+                    <div style="background-image: url('${imagesBasePath}${resDetails.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500"></div>
                     <div class="flex flex-col gap-y-5 text-lg">
                         <h5 class="text-xl font-semibold text-center md:text-left">${resDetails.tagline}</h5>
                         <p>${resDetails.overview}</p>
@@ -156,18 +156,25 @@ function displayMovieDetails (resDetails, resCredits) {
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Runtime:</span>
-                                <div class="w-full flex items-center">
+                                <div class="w-full flex items-center gap-x-1">
                                     <img class="w-[20px]" src="../svg/clock.svg" alt="clock" />
                                     <span>${resDetails?.runtime ? resDetails.runtime : "Unknown"}m</span>
                                 </div>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Rated:</span>
-                                <span class="w-full">${resDetails.vote_average.toString().length > 1 ? resDetails.vote_average.toString().substring(0, 3) : resDetails.vote_average.toString()} / 10</span>
+                                <span class="w-full">${resDetails.vote_count > 0 ? (resDetails.vote_average.toString().length > 1 ? resDetails.vote_average.toString().substring(0, 3) + " / 10" : resDetails.vote_average.toString() + " / 10") : "No ratings"}</span>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Cast:</span>
-                                <span class="w-full">${resCredits.cast.length > 0 ? resCredits.cast.slice(0, 5).map(member => member.name).join(", ") : "None"}</span>
+                                <span class="w-full">${
+									resCredits.cast.length > 0
+										? resCredits.cast
+												.slice(0, 5)
+												.map((member) => member.name)
+												.join(", ")
+										: "None"
+								}</span>
                             </div>
                         </div>
                     </div>
