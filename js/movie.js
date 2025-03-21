@@ -82,8 +82,8 @@ async function getMovieInfo(idQuery = null) {
 	const languageQuery = urlParams.get("language") || "en";
 
 	if (idQuery) {
-        window.history.pushState({}, "", `movie.html?language=${languageQuery}&id=${idQuery}`);
-        window.location.reload();
+		window.history.pushState({}, "", `movie.html?language=${languageQuery}&id=${idQuery}`);
+		window.location.reload();
 	} else {
 		idQuery = urlParams.get("id");
 	}
@@ -131,9 +131,9 @@ async function getMovieCredits(idQuery, languageQuery) {
 	}
 }
 
-function displayMovieDetails (resDetails, resCredits) {
-    console.log(resDetails);
-    console.log(resCredits);
+function displayMovieDetails(resDetails, resCredits) {
+	console.log(resDetails);
+	console.log(resCredits);
 	const main = document.querySelector("main");
 	main.innerHTML = `
         <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
@@ -144,7 +144,7 @@ function displayMovieDetails (resDetails, resCredits) {
                     <div style="background-image: url('${imagesBasePath}${resDetails.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500"></div>
                     <div class="flex flex-col gap-y-5 text-lg">
                         <h5 class="text-xl font-semibold text-center md:text-left">${resDetails.tagline}</h5>
-                        <p>${resDetails.overview}</p>
+                        <p>${resDetails.overview ? resDetails.overview : "No description given in the selected language"}</p>
                         <div class="flex flex-col min-w-fit w-full">
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Released:</span>
@@ -158,7 +158,7 @@ function displayMovieDetails (resDetails, resCredits) {
                                 <span class="shrink-0 w-[30%] max-w-24">Runtime:</span>
                                 <div class="w-full flex items-center gap-x-1">
                                     <img class="w-[20px]" src="../svg/clock.svg" alt="clock" />
-                                    <span>${resDetails?.runtime ? resDetails.runtime : "Unknown"}m</span>
+                                    <span>${resDetails?.runtime ? resDetails.runtime + "m" : "Unknown"}</span>
                                 </div>
                             </div>
                             <div class="flex w-full gap-x-5">
@@ -180,13 +180,46 @@ function displayMovieDetails (resDetails, resCredits) {
                     </div>
                 </div>
             </div>
-        </div>`;
+        </div>
+        <div class="flex flex-col items-center gap-y-4 p-3 w-full xl:w-80 h-full min-h-fit xl:overflow-y-auto xl:shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.3)] shadow-[0_-15px_20px_-5px_rgba(0,0,0,0.5)]">
+            <h2 class="text-3xl font-semibold">Rate this movie</h2>
+            <form class="flex flex-col items-center gap-y-3 w-full">
+            
+                <div class="flex flex-col items-center gap-3">
+                    <div id="star-rating" class="flex text-gray-400 text-3xl cursor-pointer">
+                        <span onclick="Review.updateRating(1)" class="star">★</span>
+                        <span onclick="Review.updateRating(2)" class="star">★</span>
+                        <span onclick="Review.updateRating(3)" class="star">★</span>
+                        <span onclick="Review.updateRating(4)" class="star">★</span>
+                        <span onclick="Review.updateRating(5)" class="star text-yellow-400">★</span>
+                    </div>
+                </div>
+
+                <textarea class="w-full h-40 p-2 bg-black/20 border-2 border-black/30 rounded-xl leading-normal resize-none" placeholder="Write your comment here..."></textarea>
+                <button class="bg-blue-900 rounded-lg px-3 py-1" type="submit">Submit</button>
+            </form>
+        </div>
+        `;
+}
+
+class Review {
+	static comment = "";
+	static rating = 0;
+
+    static updateRating (value) {
+        const stars = document.querySelectorAll("#star-rating .star");
+        Review.rating = value;
+        stars.forEach((star, i) => {
+            console.log(star);
+            star.classList.toggle("text-yellow-400", i < Review.rating);
+        })
+	}
 }
 
 (() => {
 	if (window.location.pathname.endsWith("movie.html")) {
 		getMovieInfo();
-        window.addEventListener("popstate", () => {
+		window.addEventListener("popstate", () => {
 			const main = document.querySelector("main");
 			if (window.location.pathname.endsWith("index.html")) {
 				console.log("navigated to index.html");
@@ -211,7 +244,7 @@ function displayMovieDetails (resDetails, resCredits) {
 				loadFavorites();
 			} else if (window.location.pathname.endsWith("movie.html")) {
 				console.log("navigated to movie.html");
-				main.className = "relative flex-1 flex justify-center items-center";
+				main.className = "relative flex-1 flex flex-col md:flex justify-center items-center";
 				main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>

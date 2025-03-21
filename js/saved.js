@@ -49,7 +49,7 @@ function loadFavorites() {
                 loadFavorites();
             } else if (window.location.pathname.endsWith("movie.html")) {
                 console.log("navigated to movie.html");
-                main.className = "relative flex-1 flex justify-center items-center";
+                main.className = "relative flex-1 flex flex-col md:flex justify-center items-center";
                 main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>

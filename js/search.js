@@ -255,13 +255,13 @@ function displayMovies(moviesObj, search = null) {
 	element.innerHTML = "";
 	if (moviesObj.results) {
 		for (let movie of moviesObj.results) {
-			if (movie.original_language === languageQuery) {
+			if (movie.original_language === languageQuery || true) {
 				element.innerHTML += `
 				<div class="flex sm:flex-col justify-center items-center gap-y-4 gap-x-3 w-[90%] sm:w-[45%] md:w-[30%] lg:w-[22.5%] xl:w-[18%]">
 					<div id="${movie.id}" style="background-image: url('${imagesBasePath}${movie.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center w-full aspect-[2/3] rounded-4xl overflow-hidden group">
 						<div onclick="getMovieInfo(${movie.id})" class="flex relative justify-end items-start w-full h-full p-3 group-hover:bg-black/50 transition-all duration-300">
 							<img class="svg w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-							<img onclick="saveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="svg w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
+							<img onclick="event.stopPropagation(); saveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="svg w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
 							<img class="svg w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 						</div>
 					</div>
@@ -277,7 +277,7 @@ function displayMovies(moviesObj, search = null) {
 			if (savedMovies.some((mov) => mov.id === movie.id)) {
 				iconsContainer.innerHTML = `
                         <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
-                        <img onclick="unsaveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+                        <img onclick="event.stopPropagation(); unsaveMovie(${movie.id}, '${encodeURIComponent(movie.original_title).replace(/'/g, "%27")}', '${movie.release_date}', '${movie.poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
                         <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
                     `;
 			}
@@ -295,7 +295,7 @@ function saveMovie(id, original_title, release_date, poster_path) {
 
 	iconsContainer.innerHTML = `
 		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
-		<img onclick="unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+		<img onclick="event.stopPropagation(); unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
 		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 	`;
 
@@ -321,7 +321,7 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 
 	iconsContainer.innerHTML = `
 		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-		<img onclick="saveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
+		<img onclick="event.stopPropagation(); saveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
 		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 	`;
 
@@ -363,7 +363,7 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 				loadFavorites();
 			} else if (window.location.pathname.endsWith("movie.html")) {
 				console.log("navigated to movie.html");
-                main.className = "relative flex-1 flex justify-center items-center";
+                main.className = "relative flex-1 flex flex-col md:flex justify-center items-center";
 				main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
