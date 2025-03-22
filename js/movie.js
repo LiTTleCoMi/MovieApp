@@ -77,6 +77,9 @@
 //   "vote_count": 28013
 // }
 
+let details;
+let credits;
+
 async function getMovieInfo(idQuery = null) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const languageQuery = urlParams.get("language") || "en";
@@ -88,9 +91,9 @@ async function getMovieInfo(idQuery = null) {
 		idQuery = urlParams.get("id");
 	}
 
-	const [details, credits] = await Promise.all([getMovieDetails(idQuery, languageQuery), getMovieCredits(idQuery, languageQuery)]);
+	[details, credits] = await Promise.all([getMovieDetails(idQuery, languageQuery), getMovieCredits(idQuery, languageQuery)]);
 
-	displayMovieDetails(details, credits);
+	displayMovieDetails();
 }
 
 async function getMovieDetails(idQuery, languageQuery) {
@@ -131,88 +134,145 @@ async function getMovieCredits(idQuery, languageQuery) {
 	}
 }
 
-function displayMovieDetails(resDetails, resCredits) {
-	console.log(resDetails);
-	console.log(resCredits);
+function displayMovieDetails() {
+	console.log(details);
 	const main = document.querySelector("main");
 	main.innerHTML = `
         <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
-        <div style="background-image: url('${imagesBasePath}${resDetails.backdrop_path ? resDetails.backdrop_path : resDetails.poster_path}')" class="bg-center bg-cover w-full h-full">
+        <div style="background-image: url('${imagesBasePath}${details.backdrop_path ? details.backdrop_path : details.poster_path}')" class="bg-center bg-cover w-full h-full">
             <div class="flex flex-col justify-center items-center h-full w-full gap-y-10 p-10 bg-radial from-black/70 from-50% to-black/40">
-                <h2 class="text-4xl font-semibold text-center">${resDetails.title}</h2>
+                <h2 class="text-4xl font-semibold text-center">${details.title}</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-x-15 gap-y-10 w-full max-w-5xl">
-                    <div style="background-image: url('${imagesBasePath}${resDetails.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500"></div>
+                    <div style="background-image: url('${imagesBasePath}${details.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500"></div>
                     <div class="flex flex-col gap-y-5 text-lg">
-                        <h5 class="text-xl font-semibold text-center md:text-left">${resDetails.tagline}</h5>
-                        <p>${resDetails.overview ? resDetails.overview : "No description given in the selected language"}</p>
+                        <h5 class="text-xl font-semibold text-center md:text-left">${details.tagline}</h5>
+                        <p id="overview">${details.overview ? details.overview : "No description given in the selected language"}</p>
                         <div class="flex flex-col min-w-fit w-full">
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Released:</span>
-                                <span class="w-full">${resDetails.release_date}</span>
+                                <span class="w-full">${details.release_date}</span>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Genres:</span>
-                                <span class="w-full">${resDetails.genres.map((genre) => genre.name).join(", ")}</span>
+                                <span class="w-full">${details.genres.map((genre) => genre.name).join(", ")}</span>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Runtime:</span>
                                 <div class="w-full flex items-center gap-x-1">
                                     <img class="w-[20px]" src="../svg/clock.svg" alt="clock" />
-                                    <span>${resDetails?.runtime ? resDetails.runtime + "m" : "Unknown"}</span>
+                                    <span>${details?.runtime ? details.runtime + "m" : "Unknown"}</span>
                                 </div>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Rated:</span>
-                                <span class="w-full">${resDetails.vote_count > 0 ? (resDetails.vote_average.toString().length > 1 ? resDetails.vote_average.toString().substring(0, 3) + " / 10" : resDetails.vote_average.toString() + " / 10") : "No ratings"}</span>
+                                <span class="w-full">${details.vote_count > 0 ? (details.vote_average.toString().length > 1 ? details.vote_average.toString().substring(0, 3) + " / 10" : details.vote_average.toString() + " / 10") : "No ratings"}</span>
                             </div>
                             <div class="flex w-full gap-x-5">
                                 <span class="shrink-0 w-[30%] max-w-24">Cast:</span>
                                 <span class="w-full">${
-									resCredits.cast.length > 0
-										? resCredits.cast
+									credits.cast.length > 0
+										? credits.cast
 												.slice(0, 5)
 												.map((member) => member.name)
 												.join(", ")
 										: "None"
-								}</span>
+								}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col items-center gap-y-4 p-3 w-full xl:w-80 h-full min-h-fit xl:overflow-y-auto xl:shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.3)] shadow-[0_-15px_20px_-5px_rgba(0,0,0,0.5)]">
-            <h2 class="text-3xl font-semibold">Rate this movie</h2>
-            <form class="flex flex-col items-center gap-y-3 w-full">
-            
-                <div class="flex flex-col items-center gap-3">
-                    <div id="star-rating" class="flex text-gray-400 text-3xl cursor-pointer">
-                        <span onclick="Review.updateRating(1)" class="star">★</span>
-                        <span onclick="Review.updateRating(2)" class="star">★</span>
-                        <span onclick="Review.updateRating(3)" class="star">★</span>
-                        <span onclick="Review.updateRating(4)" class="star">★</span>
-                        <span onclick="Review.updateRating(5)" class="star text-yellow-400">★</span>
-                    </div>
+        <div class="flex flex-col items-center gap-y-4 p-3 w-full xl:w-80 h-full max-h-[calc(100vh-6rem)] xl:overflow-y-auto xl:shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.3)] shadow-[0_-15px_20px_-5px_rgba(0,0,0,0.5)]">
+            <h2 class="text-3xl font-semibold">Leave a Review</h2>
+            <form onsubmit="Review.submitReview(event)" class="flex flex-col items-center gap-y-5 w-full max-w-2xl">
+                <div id="star-rating" class="flex text-gray-400 text-3xl cursor-pointer">
+                    <span onclick="Review.updateRating(1)" class="star">★</span>
+                    <span onclick="Review.updateRating(2)" class="star">★</span>
+                    <span onclick="Review.updateRating(3)" class="star">★</span>
+                    <span onclick="Review.updateRating(4)" class="star">★</span>
+                    <span onclick="Review.updateRating(5)" class="star">★</span>
                 </div>
-
+                <span id="rating-warning" class="text-red-400 hidden">Must select a rating!</span>
                 <textarea class="w-full h-40 p-2 bg-black/20 border-2 border-black/30 rounded-xl leading-normal resize-none" placeholder="Write your comment here..."></textarea>
                 <button class="bg-blue-900 rounded-lg px-3 py-1" type="submit">Submit</button>
             </form>
+            
+            <div class="w-full flex flex-col gap-y-3 justify-center">
+                <h2 class="text-3xl text-center font-semibold">Reviews</h2>
+                <div id="reviews" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 gap-4">
+                </div>
+            </div>
         </div>
         `;
+
+	function displayMovieReviews(id) {
+		let savedMovies = localStorage.getItem("savedMovies");
+		savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
+		for (let movie of savedMovies) {
+			if (movie.id === id) {
+				let reviews = movie.reviews;
+				for (let review of reviews) {
+					if (review.rating) {
+						Review.displayReview(review);
+					}
+				}
+				break;
+			}
+		}
+	}
+	displayMovieReviews(details.id);
 }
 
 class Review {
 	static comment = "";
 	static rating = 0;
 
-    static updateRating (value) {
-        const stars = document.querySelectorAll("#star-rating .star");
-        Review.rating = value;
-        stars.forEach((star, i) => {
-            console.log(star);
-            star.classList.toggle("text-yellow-400", i < Review.rating);
-        })
+	static updateRating(value) {
+		const stars = document.querySelectorAll("#star-rating .star");
+		Review.rating = value;
+		stars.forEach((star, i) => {
+			star.classList.toggle("text-yellow-400", i < Review.rating);
+		});
+	}
+	static submitReview(event) {
+		const ratingWarning = document.getElementById("rating-warning");
+		event.preventDefault();
+		if (Review.rating) {
+			let stars = [];
+			for (let i = 0; i < 5; i++) stars.push(`<span class="star${i < Review.rating ? " text-yellow-400" : ""}">★</span>`);
+			const userComment = document.querySelector("textarea");
+
+			// save the review + movie
+			saveMovie(details.id, details.original_title, details.release_date, details.poster_path, { comment: userComment.value, rating: Review.rating });
+
+			// reset the review
+			Review.displayReview({ comment: userComment.value, rating: Review.rating });
+			userComment.value = "";
+			Review.rating = 0;
+			Review.updateRating();
+			if (!ratingWarning.classList.contains("hidden")) ratingWarning.classList.add("hidden");
+		} else {
+			ratingWarning.classList.remove("hidden");
+		}
+	}
+
+	static displayReview(review) {
+		const reviewsSection = document.getElementById("reviews");
+		let stars = [];
+		for (let i = 0; i < 5; i++) stars.push(`<span class="star${i < review.rating ? " text-yellow-400" : ""}">★</span>`);
+		const reviewHTML = `
+            <div class="review w-full flex flex-col gap-y-1 py-2 px-3 bg-black/20 rounded-lg">
+                <div class="rating flex text-gray-400 text-2xl cursor-pointer">
+                    ${stars.join("")}
+                </div>
+                <p>
+                    ${review.comment}
+                </p>
+            </div>
+        `;
+		reviewsSection.innerHTML = reviewHTML + reviewsSection.innerHTML;
 	}
 }
 

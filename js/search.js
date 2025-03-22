@@ -84,13 +84,13 @@ function toggleLangSelect() {
 function switchLang(lang) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchQuery = urlParams.get("search");
-    const pageQuery = urlParams.get("page");
-    const idQuery = urlParams.get("id");
+	const pageQuery = urlParams.get("page");
+	const idQuery = urlParams.get("id");
 
 	window.history.pushState({}, "", `?language=${lang}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}${pageQuery ? "&page=" + pageQuery : ""}${idQuery ? "&id=" + idQuery : ""}`);
 
-    if (window.location.pathname.endsWith("index.html")) performSearchFunction();
-    if (window.location.pathname.endsWith("movie.html")) getMovieInfo();
+	if (window.location.pathname.endsWith("index.html")) performSearchFunction();
+	if (window.location.pathname.endsWith("movie.html")) getMovieInfo();
 }
 
 function expandSearch() {
@@ -174,8 +174,8 @@ function changePage(page) {
 	const searchQuery = urlParams.get("search");
 	const languageQuery = urlParams.get("language");
 	window.history.pushState({}, "", `?language=${languageQuery}${searchQuery ? "&search=" + encodeURIComponent(searchQuery) : ""}&page=${page}`);
-	
-    performSearchFunction();
+
+	performSearchFunction();
 }
 
 function customPageSelection(event) {
@@ -288,26 +288,40 @@ function displayMovies(moviesObj, search = null) {
 	displayPages(moviesObj);
 }
 
-function saveMovie(id, original_title, release_date, poster_path) {
+function saveMovie (id, original_title, release_date, poster_path, review = {}) {
 	original_title = decodeURIComponent(original_title);
 	// Update the save icon
-	let iconsContainer = document.getElementById(`${id}`).querySelector("div");
+	if (!review) {
+		let iconsContainer = document.getElementById(`${id}`).querySelector("div");
 
-	iconsContainer.innerHTML = `
-		<img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
-		<img onclick="event.stopPropagation(); unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
-		<img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
-	`;
+		iconsContainer.innerHTML = `
+            <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
+            <img onclick="event.stopPropagation(); unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
+            <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
+	    `;
+    } else {
+        // add logic to update the save icon on the movies page
+    }
 
+	let savedMovies = localStorage.getItem("savedMovies");
+    savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
+    // merge any reviews to reviews var
+    let reviews = [review]
+    savedMovies.forEach(mov => {
+        if (mov.id === id) {
+            reviews = reviews = [...reviews, ...mov.reviews];
+        }
+    });
+    // if the movie is already saved remove it
+    savedMovies = savedMovies.filter(mov => mov.id !== id);
 	const movie = {
 		id: id,
 		title: original_title,
 		date: release_date,
 		poster: poster_path,
-		time_saved: Date.now(),
+        time_saved: Date.now(),
+        reviews: reviews,
 	};
-	let savedMovies = localStorage.getItem("savedMovies");
-	savedMovies = savedMovies ? JSON.parse(savedMovies) : [];
 	savedMovies.unshift(movie);
 	localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
 
@@ -338,23 +352,23 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 (() => {
 	if (window.location.pathname.endsWith("index.html")) {
 		performSearchFunction();
-        window.addEventListener("popstate", () => {
-            const main = document.querySelector('main');
+		window.addEventListener("popstate", () => {
+			const main = document.querySelector("main");
 			if (window.location.pathname.endsWith("index.html")) {
-                console.log("navigated to index.html");
-                main.className = "flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative";
-                main.innerHTML = `
+				console.log("navigated to index.html");
+				main.className = "flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative";
+				main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Most Popular</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
 
                     <div id="movies" class="flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start w-full"></div>
                     <div class="w-full flex justify-center items-center">
                         <div id="page-selector" class="bg-blue-950 flex gap-x-2 p-3 w-fit rounded-full"></div>
-                    </div>`
+                    </div>`;
 				performSearchFunction();
 			} else if (window.location.pathname.endsWith("library.html")) {
 				console.log("navigated to library.html");
-                main.className = "flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative";
+				main.className = "flex flex-wrap py-6 gap-x-3 gap-y-10 justify-evenly items-start relative";
 				main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
@@ -363,7 +377,7 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 				loadFavorites();
 			} else if (window.location.pathname.endsWith("movie.html")) {
 				console.log("navigated to movie.html");
-                main.className = "relative flex-1 flex flex-col md:flex justify-center items-center";
+				main.className = "relative flex-1 flex flex-col md:flex justify-center items-center";
 				main.innerHTML = `
                     <h2 id="results-text" class="text-4xl w-full text-center px-5">Favorites</h2>
                     <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
