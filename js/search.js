@@ -291,7 +291,7 @@ function displayMovies(moviesObj, search = null) {
 function saveMovie (id, original_title, release_date, poster_path, review = {}) {
 	original_title = decodeURIComponent(original_title);
 	// Update the save icon
-	if (!review) {
+	if (Object.keys(review).length === 0) {
 		let iconsContainer = document.getElementById(`${id}`).querySelector("div");
 
 		iconsContainer.innerHTML = `
