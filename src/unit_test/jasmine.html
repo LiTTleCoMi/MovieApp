@@ -9,10 +9,13 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.9.0/jasmine-html.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.9.0/boot.min.js"></script>
 		<script src="../../js/movie.js"></script>
+		<script src="../../js/search.js"></script>
 	</head>
 	<body>
-        <h1>Jasmine Unit Test</h1>
-		<div id="reviews" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 gap-4"></div>
+		<h1>Jasmine Unit Test</h1>
+		<div id="reviews"></div>
 		<script src="display_review.spec.js"></script>
+        <h1>Jasmine Integration Test</h1>
+        <script src="save_movie.spec.js"></script>
 	</body>
 </html>

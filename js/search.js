@@ -288,24 +288,25 @@ function displayMovies(moviesObj, search = null) {
 	displayPages(moviesObj);
 }
 
-function saveMovie (id, original_title, release_date, poster_path, review = '{}') {
-    console.log(review)
-    review = JSON.parse(review)
+function saveMovie(id, original_title, release_date, poster_path, review = "{}") {
+	console.log(review);
+	review = JSON.parse(review);
 	original_title = decodeURIComponent(original_title);
 	// Update the save icon
 	if (Object.keys(review).length === 0) {
 		let iconsContainer = document.getElementById(`${id}`).querySelector("div");
-
 		iconsContainer.innerHTML = `
             <img class="w-2/10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/bookmark_remove_fill.svg" alt="save this movie" />
             <img onclick="event.stopPropagation(); unsaveMovie(${id}, '${encodeURIComponent(original_title).replace(/'/g, "%27")}', '${release_date}', '${poster_path}')" class="w-2/10 absolute opacity-0 transition-opacity duration-300" src="../svg/bookmark_add.svg" alt="save this movie" />
             <img class="w-3/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" src="../svg/play_arrow.svg" alt="view movie details" />
 	    `;
 	} else {
-        // add logic to update the save icon on the movies page
+		// add logic to update the save icon on the movies page
 		const saveIcon = document.getElementById("save-icon");
-		saveIcon.src = "../svg/bookmark_remove_fill.svg";
-		saveIcon.onclick = () => unsaveMovie(id, encodeURIComponent(original_title).replace(/'/g, "%27"), release_date, poster_path);
+		if (saveIcon) {
+			saveIcon.src = "../svg/bookmark_remove_fill.svg";
+			saveIcon.onclick = () => unsaveMovie(id, encodeURIComponent(original_title).replace(/'/g, "%27"), release_date, poster_path);
+		}
 	}
 
 	let savedMovies = localStorage.getItem("savedMovies");
@@ -314,8 +315,8 @@ function saveMovie (id, original_title, release_date, poster_path, review = '{}'
 	let reviews = [review];
 	savedMovies.forEach((mov) => {
 		if (mov.id === id) {
-            reviews = reviews = [...reviews, ...mov.reviews];
-            for (let i = reviews.length - 1; i >= 0; i--) {
+			reviews = reviews = [...reviews, ...mov.reviews];
+			for (let i = reviews.length - 1; i >= 0; i--) {
 				if (reviews[i].rating === 0) {
 					reviews.splice(i, 1);
 				}
@@ -340,11 +341,11 @@ function saveMovie (id, original_title, release_date, poster_path, review = '{}'
 
 function unsaveMovie(id, original_title, release_date, poster_path) {
 	original_title = decodeURIComponent(original_title);
-    // Update the save icon
-    const saveIcon = document.getElementById("save-icon")
-    if (saveIcon) {
-        saveIcon.src = "../svg/bookmark_add.svg"
-        saveIcon.onclick = () => saveMovie(id, encodeURIComponent(original_title).replace(/'/g, "%27"), release_date, poster_path, '{ "rating": 0 }');
+	// Update the save icon
+	const saveIcon = document.getElementById("save-icon");
+	if (saveIcon) {
+		saveIcon.src = "../svg/bookmark_add.svg";
+		saveIcon.onclick = () => saveMovie(id, encodeURIComponent(original_title).replace(/'/g, "%27"), release_date, poster_path, '{ "rating": 0 }');
 	} else {
 		let iconsContainer = document.getElementById(`${id}`).querySelector("div");
 
@@ -357,7 +358,7 @@ function unsaveMovie(id, original_title, release_date, poster_path) {
 
 	let savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
 	if (savedMovies) {
-        savedMovies = savedMovies.filter((movie) => {
+		savedMovies = savedMovies.filter((movie) => {
 			return movie.id !== id;
 		});
 	}
