@@ -79,6 +79,7 @@
 
 let details;
 let credits;
+let saved = false;
 
 async function getMovieInfo(idQuery = null) {
 	const urlParams = new URLSearchParams(window.location.search);
@@ -91,7 +92,16 @@ async function getMovieInfo(idQuery = null) {
 		idQuery = urlParams.get("id");
 	}
 
-	[details, credits] = await Promise.all([getMovieDetails(idQuery, languageQuery), getMovieCredits(idQuery, languageQuery)]);
+    [details, credits] = await Promise.all([getMovieDetails(idQuery, languageQuery), getMovieCredits(idQuery, languageQuery)]);
+    
+    let savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    if (savedMovies) {
+        for (movie of savedMovies) {
+            if (movie.id === details.id) {
+                saved = true;
+            }
+        }
+	}
 
 	displayMovieDetails();
 }
@@ -136,15 +146,19 @@ async function getMovieCredits(idQuery, languageQuery) {
 
 function displayMovieDetails() {
 	console.log(details);
-	const main = document.querySelector("main");
+    const main = document.querySelector("main");
 	main.innerHTML = `
         <div id="menu-drop-down" class="absolute top-0 right-0 flex"></div>
         <div style="background-image: url('${imagesBasePath}${details.backdrop_path ? details.backdrop_path : details.poster_path}')" class="bg-center bg-cover w-full h-full">
             <div class="flex flex-col justify-center items-center h-full w-full gap-y-10 p-10 bg-radial from-black/70 from-50% to-black/40">
                 <h2 class="text-4xl font-semibold text-center">${details.title}</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-x-15 gap-y-10 w-full max-w-5xl">
-                    <div style="background-image: url('${imagesBasePath}${details.poster_path}')" class="flex flex-col justify-end items-center bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500"></div>
-                    <div class="flex flex-col gap-y-5 text-lg">
+                    <div style="background-image: url('${imagesBasePath}${details.poster_path}')" class="flex justify-start items-start bg-cover bg-center shrink-0 w-[17rem] sm:w-[18rem] lg:w-[19rem] xl:w-[20rem] aspect-[2/3] rounded-2xl overflow-hidden border border-zinc-500">
+                        <div class="svg relative -translate-x-[1px] -translate-y-[1px] rounded-br-full bg-gray-800/50">
+                            <img id="save-icon" onclick='saveMovie(${details.id}, "${encodeURIComponent(details.original_title).replace(/'/g, "%27")}", "${details.release_date}", "${details.poster_path}", JSON.stringify({ "rating": 0 }))' class="svg w-15 pt-1 pl-1 pr-3 pb-3" src="../svg/bookmark_add.svg" alt="save this movie" />
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-y-4 text-lg">
                         <h5 class="text-xl font-semibold text-center md:text-left">${details.tagline}</h5>
                         <p id="overview">${details.overview ? details.overview : "No description given in the selected language"}</p>
                         <div class="flex flex-col min-w-fit w-full">
@@ -206,6 +220,15 @@ function displayMovieDetails() {
             </div>
         </div>
         `;
+    
+    let saveIcon = document.getElementById("save-icon");
+    if (saved) {
+		saveIcon.src = "../svg/bookmark_remove_fill.svg";
+		saveIcon.onclick = () => unsaveMovie(details.id, encodeURIComponent(details.original_title).replace(/'/g, "%27"), details.release_date, details.poster_path);
+    } else {
+        saveIcon.src = "../svg/bookmark_add.svg";
+		saveIcon.onclick = () => saveMovie(details.id, encodeURIComponent(details.original_title).replace(/'/g, "%27"), details.release_date, details.poster_path, '{ "rating": 0 }');
+    }
 
 	function displayMovieReviews(id) {
 		let savedMovies = localStorage.getItem("savedMovies");
@@ -245,7 +268,7 @@ class Review {
 			const userComment = document.querySelector("textarea");
 
 			// save the review + movie
-			saveMovie(details.id, details.original_title, details.release_date, details.poster_path, { comment: userComment.value, rating: Review.rating });
+			saveMovie(details.id, details.original_title, details.release_date, details.poster_path, JSON.stringify({ comment: userComment.value, rating: Review.rating }));
 
 			// reset the review
 			Review.displayReview({ comment: userComment.value, rating: Review.rating });
