@@ -1,36 +1,43 @@
-# MovieApp
+Movie Information App
 
-npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch
+Capabilites:
+    - Search for any movie and view the details about any movie.
+    - Save movies to your library.
+    - Add reviews to the movies.
+    - View your library.
 
+How to use:
+    Setup Locally:
+        - Clone the project with git@github.com:LiTTleCoMi/MovieApp.git
+            Or
+        - Download the .zip and unzip the folder
 
-A platform for browsing and managing a collection of movies.
+        This app is required to run on a server!
 
+        Setting up a local server:
+            Using Live Server Extension in VSCode (Visual Studio Code):
+                Install VSCode (if you don't have it already) from https://code.visualstudio.com/.
+                Install the Live Server extension:
+                    - Open VS Code, go to the Extensions panel, search for Live Server, and install it.
+                Open your project folder in VS Code:
+                    - Open the folder containing your app files by selecting File > Open Folder in VS Code.
+                Launch Live Server:
+                    - Right-click on your index.html (or main file) and select Open with Live Server.
+                    - Alternatively, click on the Go Live button at the bottom-right corner of VS Code.
+                    - This will launch a local server at http://localhost:5500 (by default).
 
-! Minimum Requirements :
-```````````````````````
-    Your application must include the following :
-    ````````````````````````````````````````````
-        A fully functional browser-based app.
-        An intuitive and responsive UI (mobile-first design).
-        Meaningful functionality that solves a problem or provides value to users.
-        Data persistence using either local storage or Firebase.
-        Integration of at least one external library.
-        A GitHub repository with proper version control.
-        A README file with clear usage instructions.
-        Unit tests for at least one feature.
-        Integration tests for at least one feature.
+            Using Node.js:
+                - Install Node.js and npm (if you haven't already) from https://nodejs.org.
+                - Install http-server globally (via npm):
+                    - npm install -g http-server
+                - Navigate to the app directory:
+                    - cd /path/to/the/app.
+                - Start the server:
+                    - http-server
+                This will start a local server at http://localhost:8080 (or another available port).
+        
+    On the web:
+        - Go to https://littlecomi.github.io/MovieApp/src/index.html.
 
-App Features Required :
-``````````````````````
-    Your project must incorporate at least five or more of the following features :
-    ``````````````````````````````````````````````````````````````````````````````
-        User Authentication (login and registration functionality).
-        A method for data storage (e.g., Local Storage or Firebase).
-        A mobile-first, responsive design.
-        A page with multiple interactive components.
-        Display of stored data, with the ability to filter and sort.
-        CRUD functionality (Create, Read, Update, Delete operations).
-        Data export (e.g., to a JSON file).
-        Ability to test and validate core features.
-
-
+!IMPORTANT!
+    Make sure you are in the directory src/<file.html> instead of just src/
